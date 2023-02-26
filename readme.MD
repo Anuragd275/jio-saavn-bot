@@ -4,7 +4,7 @@ This Telegram bot can download any song available on Jio Saavn. To use the bot, 
 
 ## Installation
 
-1. Clone this repository: `git clone https://github.com/your_username/your_repository.git`
+1. Clone this repository: `git clone https://github.com/Anuragd275/jio-saavn-bot.git`
 2. Install the required packages: `pip install -r requirements.txt`
 3. Run the bot: `python main.py`
 
