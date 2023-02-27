@@ -2,16 +2,20 @@ import requests
 import telebot
 import json
 
-TOKEN = '5884474456:AAEsU7xKu6uZJUL1jb7uEK2M9g-mh5sY3IM'
+TOKEN = 'YOUR_BOT_TOKEN'
 
 bot = telebot.TeleBot(TOKEN)
 
 # Functions to do extra tasks!
 
+# extract the title of the song (User Input)
+
 def extract_string(string, prefix):
     if string.startswith(prefix):
         return string[len(prefix):]
     return string
+
+# get the title from API
 
 def song_fetcher(title):
     response = requests.get(f'{CONST_SONG_LINK}{title}')
@@ -25,6 +29,8 @@ def artist_fetcher(title):
     artist_name = data["data"]["results"][0]["primaryArtists"]
     return artist_name
 
+# downloading the song and saving as f'{title}.mp3'
+
 def song_dl(title):
     response = requests.get(f'{CONST_SONG_LINK}{title}')
     data = response.json()
@@ -35,24 +41,28 @@ def song_dl(title):
     fp.close()
 
 # -------------------- FUNCTION TERMINATION LINE --------------------
+# API endpoint
 
 CONST_SONG_LINK = 'https://saavn.me/search/songs?query='
+
+# handeling /start and /help
 
 @bot.message_handler(commands=['start', 'help'])
 def welcome_message(message):
     chat_id = message.chat.id
     bot.send_message(chat_id, "Hi, I'm Alive!")
 
+# handeling /song
+
 @bot.message_handler(commands=['song'])
 def song_request(request):
     chat_id = request.chat.id
-
+    
     request_text = request.text
     title_input = extract_string(request_text, "/song")
-
     song_title = f'{CONST_SONG_LINK}{title_input}' 
     bot.send_message(chat_id, f"Getting {title_input}")
-
+    
     try:
         title = song_fetcher(title_input)
         artist = artist_fetcher(title_input)
