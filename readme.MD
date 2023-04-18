@@ -18,7 +18,7 @@ This Telegram bot can download any song available on Jio Saavn. To use the bot, 
 
 ## Usage
 
-1. Start chatting with the bot on Telegram by searching for "@JioSaavnBot"
+1. Start chatting with the bot on Telegram by searching for "@jio_saavn_songs_bot"
 2. Send the name of the song you want to download in this format `/song Song Name`
 3. The bot will reply with the song in 320 kbps quality
 
