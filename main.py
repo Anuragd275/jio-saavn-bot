@@ -75,8 +75,7 @@ def song_request(request):
         artist = artist_fetcher(title_input)
         song_dl(title)
         file_to_send = open(f"{title}.mp3", 'rb')
-        bot.send_audio(chat_id, file_to_send,
-                       caption=f'{title} by {artist}', timeout=30.0)
+        bot.send_audio(chat_id, file_to_send, caption=f'{title} by {artist}', timeout=30.0)
 
     except Exception as e:
         bot.send_message(chat_id, f"An error occurred: {str(e)}")
