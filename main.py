@@ -2,13 +2,14 @@ import requests
 import telebot
 import json
 
-TOKEN = 'YOUR_BOT_TOKEN'
+TOKEN = '5884474456:AAEsU7xKu6uZJUL1jb7uEK2M9g-mh5sY3IM'
 
 bot = telebot.TeleBot(TOKEN)
 
 # Functions to do extra tasks!
 
 # extract the title of the song (User Input)
+
 
 def extract_string(string, prefix):
     if string.startswith(prefix):
@@ -17,11 +18,13 @@ def extract_string(string, prefix):
 
 # get the title from API
 
+
 def song_fetcher(title):
     response = requests.get(f'{CONST_SONG_LINK}{title}')
     data = response.json()
     song = data["data"]["results"][0]["name"]
     return song
+
 
 def artist_fetcher(title):
     response = requests.get(f'{CONST_SONG_LINK}{title}')
@@ -30,6 +33,7 @@ def artist_fetcher(title):
     return artist_name
 
 # downloading the song and saving as f'{title}.mp3'
+
 
 def song_dl(title):
     response = requests.get(f'{CONST_SONG_LINK}{title}')
@@ -43,9 +47,11 @@ def song_dl(title):
 # -------------------- FUNCTION TERMINATION LINE --------------------
 # API endpoint
 
+
 CONST_SONG_LINK = 'https://saavn.me/search/songs?query='
 
 # handeling /start and /help
+
 
 @bot.message_handler(commands=['start', 'help'])
 def welcome_message(message):
@@ -54,23 +60,26 @@ def welcome_message(message):
 
 # handeling /song
 
+
 @bot.message_handler(commands=['song'])
 def song_request(request):
     chat_id = request.chat.id
-    
+
     request_text = request.text
     title_input = extract_string(request_text, "/song")
-    song_title = f'{CONST_SONG_LINK}{title_input}' 
+    song_title = f'{CONST_SONG_LINK}{title_input}'
     bot.send_message(chat_id, f"Getting {title_input}")
-    
+
     try:
         title = song_fetcher(title_input)
         artist = artist_fetcher(title_input)
         song_dl(title)
         file_to_send = open(f"{title}.mp3", 'rb')
-        bot.send_audio(chat_id, file_to_send, caption=f'Title: {title}\n\nArtists: {artist}', timeout=30.0)
+        bot.send_audio(chat_id, file_to_send,
+                       caption=f'{title} by {artist}', timeout=30.0)
 
     except Exception as e:
         bot.send_message(chat_id, f"An error occurred: {str(e)}")
+
 
 bot.infinity_polling()
