@@ -1,8 +1,8 @@
 import requests
 import telebot
 import json
-import credentals
-TOKEN = credentals.BOT_TOKEN
+from credentials import BOT_TOKEN
+TOKEN = BOT_TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -33,6 +33,13 @@ def artist_fetcher(title):
     return artist_name
 
 # downloading the song and saving as f'{title}.mp3'
+
+
+def song_duration(title):
+    response = requests.get(f'{CONST_SONG_LINK}{title}')
+    data = response.json()
+    duration = data["data"]["results"][0]["duration"]
+    return duration
 
 
 def song_dl(title):
@@ -73,10 +80,12 @@ def song_request(request):
     try:
         title = song_fetcher(title_input)
         artist = artist_fetcher(title_input)
+        duration = song_duration(title_input)
+        # Download the song and then send it
         song_dl(title)
         file_to_send = open(f"{title}.mp3", 'rb')
-        bot.send_audio(chat_id, file_to_send, caption=f'{title} by {artist}', timeout=30.0)
-
+        bot.send_audio(chat_id, file_to_send,
+                       caption=f'{title}', performer=artist, duration=duration, timeout=30.0)
     except Exception as e:
         bot.send_message(chat_id, f"An error occurred: {str(e)}")
 
