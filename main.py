@@ -1,8 +1,8 @@
 import requests
 import telebot
 import json
-
-TOKEN = 'YOUR_BOT_TOKEN'
+import credentals
+TOKEN = credentals.BOT_TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
