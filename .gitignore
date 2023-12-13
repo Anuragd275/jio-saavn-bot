@@ -1,3 +1,4 @@
 .github
 .vscode
 credentials.py
+*.mp3
