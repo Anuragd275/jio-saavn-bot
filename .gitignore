@@ -2,4 +2,5 @@
 .vscode
 credentials.py
 *.mp3
+*.jpg
 __pycache__
