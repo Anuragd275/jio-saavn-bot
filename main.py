@@ -91,6 +91,9 @@ def song_request(request):
     song_title = f'{CONST_SONG_LINK}{title_input}'
     bot.send_message(chat_id, f"Getting {title_input}")
 
+    #  Bot username to be sent with every response(song)
+    bot_username = "@jio_saavn_songs_bot"
+
     try:
         title = song_fetcher(title_input)
         artist = artist_fetcher(title_input)
@@ -101,7 +104,7 @@ def song_request(request):
         song_thumbnail(title)
         thumbnail_img = open(f"{title}.jpg", 'rb')
         bot.send_audio(chat_id, file_to_send,
-                       caption=f'{title}', title=title,  performer=artist, duration=duration, thumbnail=thumbnail_img, timeout=90.0)
+                       caption=f'{bot_username}', title=title,  performer=artist, duration=duration, thumbnail=thumbnail_img, timeout=90.0)
     except Exception as e:
         bot.send_message(chat_id, f"An error occurred: {str(e)}")
 
