@@ -1,6 +1,7 @@
 import requests
 import telebot
 import json
+import time
 from credentials import BOT_TOKEN
 TOKEN = BOT_TOKEN
 
@@ -51,6 +52,19 @@ def song_dl(title):
     fp.write(responses.content)
     fp.close()
 
+# Download 150 * 150 poster and send it as thumbnail
+
+
+def song_thumbnail(title):
+    response = requests.get(f'{CONST_SONG_LINK}{title}')
+    data = response.json()
+    image_url = data['data']['results'][0]['image'][1]['link']
+    # After getting image url, use request to download it.
+    image_response = requests.get(image_url)
+    fp = open(f"{title}.jpg", "wb")
+    fp.write(image_response.content)
+    fp.close()
+
 # -------------------- FUNCTION TERMINATION LINE --------------------
 # API endpoint
 
@@ -77,6 +91,9 @@ def song_request(request):
     song_title = f'{CONST_SONG_LINK}{title_input}'
     bot.send_message(chat_id, f"Getting {title_input}")
 
+    #  Bot username to be sent with every response(song)
+    bot_username = "@jio_saavn_songs_bot"
+
     try:
         title = song_fetcher(title_input)
         artist = artist_fetcher(title_input)
@@ -84,8 +101,10 @@ def song_request(request):
         # Download the song and then send it
         song_dl(title)
         file_to_send = open(f"{title}.mp3", 'rb')
+        song_thumbnail(title)
+        thumbnail_img = open(f"{title}.jpg", 'rb')
         bot.send_audio(chat_id, file_to_send,
-                       caption=f'{title}', performer=artist, duration=duration, timeout=30.0)
+                       caption=f'{bot_username}', title=title,  performer=artist, duration=duration, thumbnail=thumbnail_img, timeout=90.0)
     except Exception as e:
         bot.send_message(chat_id, f"An error occurred: {str(e)}")
 
