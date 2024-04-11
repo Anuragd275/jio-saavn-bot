@@ -1,2 +1,5 @@
 .github
 .vscode
+__pycache__
+*.session
+*.session-journal
