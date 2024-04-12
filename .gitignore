@@ -1,5 +1,8 @@
 .github
 .vscode
+credentials.py
+*.mp3
+*.jpg
 __pycache__
 *.session
 *.session-journal
